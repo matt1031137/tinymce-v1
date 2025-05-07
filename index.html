@@ -5,15 +5,32 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vue + TinyMCE 測試 || 曉陽</title>
+
+    <style>
+
+
+
+    .btn{
+        cursor: pointer;
+        padding: 12px 24px;
+        border:none;
+        font-size: 2rem;
+        border-radius: 5px;
+        box-shadow: 1px 1px 2px black;
+    }
+
+
+    </style>
 </head>
 
 <body>
     <div id="app">
-        <h2>隨意複製word的內容試試看</h2>
+        <h2 style="margin-bottom: 0;">隨意複製word的內容試試看</h2>
+        <span>※這個插件<span style="color:red">保留word格式的功能是要付費的</span>(而且非常貴)，目前還有2個禮拜的試用期(到5/22)。有找到別的可以的插件，但設定比較難搞，目前就是證明可行性而已，還需要點時間...</span>
 
         <textarea id="editor"></textarea>
         <br>
-        <button @click="getContent">取得文章內容</button>
+        <button class="btn" @click="getContent">發文</button>
 
         <h3>文章結果：</h3>
         <div v-html="content" style="border:1px solid #ccc; padding: 1em;"></div>
