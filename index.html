@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vue + TinyMCE 測試 || 曉陽</title>
+</head>
+
+<body>
+    <div id="app">
+        <h2>隨意複製word的內容試試看</h2>
+
+        <textarea id="editor"></textarea>
+        <br>
+        <button @click="getContent">取得文章內容</button>
+
+        <h3>文章結果：</h3>
+        <div v-html="content" style="border:1px solid #ccc; padding: 1em;"></div>
+    </div>
+
+
+
+ 
+    <script src="https://cdn.tiny.cloud/1/s1anekwuozczgnqi666i7a7h8h76hkzgwfdtlbdgvkgy2zdu/tinymce/7/tinymce.min.js"
+        referrerpolicy="origin"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+ 
+<script>
+    const { createApp, ref, onMounted } = Vue
+
+    createApp({
+        setup() {
+            const content = ref('')
+
+            const getContent = () => {
+                content.value = tinymce.get('editor').getContent()
+                console.log('取得內容:', content.value)
+            }
+
+            onMounted(() => {
+                tinymce.init({
+        selector: 'textarea',
+        plugins: [
+            // Core editing features
+            'anchor', 'autolink', 'charmap', 'codesample', 'emoticons', 'image', 'link', 'lists', 'media', 'searchreplace', 'table', 'visualblocks', 'wordcount',
+            // Your account includes a free trial of TinyMCE premium features
+            // Try the most popular premium features until May 22, 2025:
+            'checklist', 'mediaembed', 'casechange', 'formatpainter', 'pageembed', 'a11ychecker', 'tinymcespellchecker', 'permanentpen', 'powerpaste', 'advtable', 'advcode', 'editimage', 'advtemplate', 'ai', 'mentions', 'tinycomments', 'tableofcontents', 'footnotes', 'mergetags', 'autocorrect', 'typography', 'inlinecss', 'markdown', 'importword', 'exportword', 'exportpdf'
+        ],
+        toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | addcomment showcomments | spellcheckdialog a11ycheck typography | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat | alignleft aligncenter alignright | image | code',
+        
+           
+        /* ✅ Base64 圖片處理，不需後端 */
+        images_upload_handler: function (blobInfo, success, failure) {
+          success("data:" + blobInfo.blob().type + ";base64," + blobInfo.base64());
+        },
+        tinycomments_mode: 'embedded',
+        tinycomments_author: 'Author name',
+        mergetags_list: [
+            { value: 'First.Name', title: 'First Name' },
+            { value: 'Email', title: 'Email' },
+        ],
+        ai_request: (request, respondWith) => respondWith.string(() => Promise.reject('See docs to implement AI Assistant')),
+    });
+            })
+
+            return {
+                content,
+                getContent
+            }
+        }
+    }).mount('#app')
+</script>
+
+
+
+</body>
+
+</html>
