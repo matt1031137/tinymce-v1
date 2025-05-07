@@ -21,58 +21,75 @@
 
 
 
- 
+
     <script src="https://cdn.tiny.cloud/1/s1anekwuozczgnqi666i7a7h8h76hkzgwfdtlbdgvkgy2zdu/tinymce/7/tinymce.min.js"
         referrerpolicy="origin"></script>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 
- 
-<script>
-    const { createApp, ref, onMounted } = Vue
 
-    createApp({
-        setup() {
-            const content = ref('')
+    <script>
+        const { createApp, ref, onMounted } = Vue
 
-            const getContent = () => {
-                content.value = tinymce.get('editor').getContent()
-                console.log('取得內容:', content.value)
+        createApp({
+            setup() {
+                const content = ref('')
+
+                const getContent = () => {
+                    content.value = tinymce.get('editor').getContent()
+                    console.log('取得內容:', content.value)
+                }
+
+                onMounted(() => {
+                    tinymce.init({
+                        selector: 'textarea',
+                        plugins: [
+                            // Core editing features
+                            'anchor', 'autolink', 'charmap', 'codesample', 'emoticons', 'image', 'link', 'lists', 'media', 'searchreplace', 'table', 'visualblocks', 'wordcount',
+                            // Your account includes a free trial of TinyMCE premium features
+                            // Try the most popular premium features until May 22, 2025:
+                            'checklist', 'mediaembed', 'casechange', 'formatpainter', 'pageembed', 'a11ychecker', 'tinymcespellchecker', 'permanentpen', 'advtable', 'advcode', 'editimage', 'advtemplate', 'ai', 'mentions', 'tinycomments', 'tableofcontents', 'footnotes', 'mergetags', 'autocorrect', 'typography', 'inlinecss', 'markdown', 'importword', 'exportword', 'exportpdf','powerpaste'
+                        ],
+                        toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | addcomment showcomments | spellcheckdialog a11ycheck typography | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat | alignleft aligncenter alignright | image | code',
+
+
+                        file_picker_types: 'image',
+                        file_picker_callback: function (callback, value, meta) {
+                            if (meta.filetype === 'image') {
+                                const input = document.createElement('input');
+                                input.setAttribute('type', 'file');
+                                input.setAttribute('accept', 'image/*');
+
+                                input.onchange = function () {
+                                    const file = this.files[0];
+                                    const reader = new FileReader();
+
+                                    reader.onload = function () {
+                                        const base64 = reader.result;
+                                        callback(base64, { alt: file.name });
+                                    };
+                                    reader.readAsDataURL(file);
+                                };
+
+                                input.click();
+                            }
+                        },
+                        tinycomments_mode: 'embedded',
+                        tinycomments_author: 'Author name',
+                        mergetags_list: [
+                            { value: 'First.Name', title: 'First Name' },
+                            { value: 'Email', title: 'Email' },
+                        ],
+                        ai_request: (request, respondWith) => respondWith.string(() => Promise.reject('See docs to implement AI Assistant')),
+                    });
+                })
+
+                return {
+                    content,
+                    getContent
+                }
             }
-
-            onMounted(() => {
-                tinymce.init({
-        selector: 'textarea',
-        plugins: [
-            // Core editing features
-            'anchor', 'autolink', 'charmap', 'codesample', 'emoticons', 'image', 'link', 'lists', 'media', 'searchreplace', 'table', 'visualblocks', 'wordcount',
-            // Your account includes a free trial of TinyMCE premium features
-            // Try the most popular premium features until May 22, 2025:
-            'checklist', 'mediaembed', 'casechange', 'formatpainter', 'pageembed', 'a11ychecker', 'tinymcespellchecker', 'permanentpen', 'powerpaste', 'advtable', 'advcode', 'editimage', 'advtemplate', 'ai', 'mentions', 'tinycomments', 'tableofcontents', 'footnotes', 'mergetags', 'autocorrect', 'typography', 'inlinecss', 'markdown', 'importword', 'exportword', 'exportpdf'
-        ],
-        toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | addcomment showcomments | spellcheckdialog a11ycheck typography | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat | alignleft aligncenter alignright | image | code',
-        
-           
-        /* ✅ Base64 圖片處理，不需後端 */
-        images_upload_handler: function (blobInfo, success, failure) {
-          success("data:" + blobInfo.blob().type + ";base64," + blobInfo.base64());
-        },
-        tinycomments_mode: 'embedded',
-        tinycomments_author: 'Author name',
-        mergetags_list: [
-            { value: 'First.Name', title: 'First Name' },
-            { value: 'Email', title: 'Email' },
-        ],
-        ai_request: (request, respondWith) => respondWith.string(() => Promise.reject('See docs to implement AI Assistant')),
-    });
-            })
-
-            return {
-                content,
-                getContent
-            }
-        }
-    }).mount('#app')
-</script>
+        }).mount('#app')
+    </script>
 
 
 
