@@ -27,8 +27,17 @@
 <body>
     <div id="app">
         <h2 style="margin-bottom: 0;">TinyMCE-隨意複製word的內容試試看</h2>
-        <span>※<span style="color:red">完整保留</span>word格式的功能是要付費的，目前還有2個禮拜的試用期(到5/22)。到期後，還是可以用，就會變成只能COPY基本的段落、表格、文字大小、縮排，從超強變回堪用的程度。</span>
-
+        <p>目前找到兩種：
+        <br>
+        1.這個網頁：完整保留word格式+可以直接貼圖片，但目前只剩2個禮拜的試用期(到5/22)。到期後，還是可以用，就會變成只能COPY基本的段落、表格、文字大小、縮排，從超強變回堪用的程度。</span>
+        <br>
+        <br>
+        2.我在唯哲學長的飛式專案的商品上架看到的，也是TinyMCE，經測試也會保留WORD完整格式，而且看起來是不用付費的(要doblecheck)。但圖片不能直接貼，只能用"貼上圖片連結(已經上傳過有網址的那種)"去編輯。
+        <br>
+        <br>
+        =>以實現性來講，用2的去調整圖片上傳的邏輯是比較可靠的。不過也是要花時間處理圖片的問題，以及跟aspx網站串接的問題！
+  
+    </p>
         <textarea id="editor"></textarea>
         <br>
         <button class="btn" @click="getContent">發文測試</button>
